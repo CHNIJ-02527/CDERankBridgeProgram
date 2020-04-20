@@ -1,0 +1,94 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+
+public class Solution {
+    private static  int EDGE_WEIGHT = 6;
+    
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        int numOfQueries = scan.nextInt();
+        
+        for (int q = 0; q < numOfQueries; q++) {
+            int numNodes = scan.nextInt();
+            int numEdges = scan.nextInt();
+            
+            Node [] node = new Node[numNodes + 1];
+            node[0] = null;
+            for (int i = 1; i <= numNodes; i++) {
+                node[i] = new Node(i);
+            }
+            
+            for (int i = 0; i < numEdges; i++) {
+                int alpha = scan.nextInt();
+                int beta = scan.nextInt();
+                node[alpha].addNeighbor(node[beta]);
+            }
+            
+            int start = scan.nextInt();
+            findDistances(node[start]);
+
+            
+            for (int i = 1; i <= numNodes; i++) {
+                if (i != start) {
+                    System.out.print(node[i].distance + " ");
+                }
+            }
+            System.out.println();
+        }
+    
+    }
+
+    private static void findDistances(Node start) {
+        if (start == null) {
+            return;
+        }
+        ArrayDeque<Node> deque = new ArrayDeque();
+        start.distance = 0;
+        deque.add(start);
+        while (!deque.isEmpty()) {
+            Node current = deque.remove();
+            for (Node neighbor : current.neighbors) {
+                if (neighbor.distance == -1) { 
+                    neighbor.distance = current.distance + EDGE_WEIGHT;
+                    deque.add(neighbor);
+                }
+            }
+     
+       }   }
+    }
+    
+     class Node {
+        public int id; 
+        public int distance; 
+        public HashSet<Node> neighbors;
+        
+        public Node (int id) {
+            this.id   = id;
+            distance  = -1;
+            neighbors = new HashSet();
+        }
+        
+        public void addNeighbor(Node neighbor) {
+            neighbors.add(neighbor);
+            neighbor.neighbors.add(this);
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (other == this) {
+                return true;
+            } else if (other == null || !(other instanceof Node)) {
+                return false;
+            }
+            Node otherNode = (Node) other;
+            return this.id == otherNode.id;
+        }
+
+        @Override
+        public int hashCode() {
+            return id;
+        }
+    }
