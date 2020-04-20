@@ -1,0 +1,21 @@
+import java.util.*;
+
+public class Solution
+{
+    public static void main(String[] args)
+    {
+        Scanner in = new Scanner(System.in);
+        int a[] = new int[in.nextInt()];
+
+        for(int j=0;j<a.length;j++)
+        {
+            a[j] = in.nextInt();      
+        }
+        in.close();
+
+        for(int j=a.length-1;j>=0;j--)
+        {
+            System.out.print(a[j] + " ");
+        }
+    }
+}
