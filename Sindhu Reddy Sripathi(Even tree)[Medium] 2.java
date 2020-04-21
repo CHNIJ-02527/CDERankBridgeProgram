@@ -36,7 +36,7 @@ public class EvenTree {
             } else {
                 count += tmpMetadata[0];
             }
-        }
+        } 
         // Increments count since we are done with current node processing
         count++;
         //returns count for input node along with edges that can be removed to decompose the tree
