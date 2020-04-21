@@ -1,0 +1,42 @@
+import java.io.*;
+import java.math.*;
+import java.security.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.regex.*;
+public class Solution
+{
+  public static void main(String args[])
+  {
+      Scanner sc=new Scanner(System.in);
+      int s=sc.nextInt();
+      int t=sc.nextInt();
+      int a=sc.nextInt();
+      int b=sc.nextInt();
+      int m=sc.nextInt();
+      int n=sc.nextInt();
+      int app=0;
+      int ora=0;
+      for(int i=0;i<m;i++)
+      {
+          int ls=sc.nextInt()+a;
+          if(ls>=s && ls<=t)
+          {
+              app++;
+          }
+      }
+      for(int i=0;i<n;i++)
+      {
+          int ls=sc.nextInt()+b;
+          if(ls>=s && ls<=t)
+          {
+              ora++;
+          }
+      }
+      System.out.println(app);
+      System.out.println(ora);
+  }
+
+
+}
