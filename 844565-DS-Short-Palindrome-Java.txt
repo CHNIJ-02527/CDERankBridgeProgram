@@ -1,0 +1,50 @@
+import java.io.*;
+import java.math.*;
+import java.security.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.regex.*;
+
+public class Solution {
+
+    // Complete the shortPalindrome function below.
+    static int shortPalindrome(String s) {
+        int p = 1000000007;
+        int first[] = new int[26];
+        int second[][] = new int[26][26];
+        int third[] = new int[26];
+        int count = 0;
+        for(int i=0;i<s.length();i++){
+            int current = s.charAt(i) - 'a';
+            count += third[current]%p;
+            count = count%p;
+            for(int j=0;j<26;j++){
+                third[j] += second[j][current]%p;
+                third[j] = third[j]%p;
+            }
+            for(int j=0;j<26;j++){
+                second[j][current] += first[j]%p;
+                second[j][current] = second[j][current]%p;
+            }
+            first[current] ++;
+            first[current] = first[current]%p;
+        }
+        return count;
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+        Scanner scanner = new Scanner(System.in);
+        String s = scanner.nextLine();
+
+        int result = shortPalindrome(s);
+
+        bufferedWriter.write(String.valueOf(result));
+        bufferedWriter.newLine();
+
+        bufferedWriter.close();
+
+        scanner.close();
+    }
+}
