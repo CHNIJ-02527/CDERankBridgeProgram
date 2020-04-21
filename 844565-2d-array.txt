@@ -1,0 +1,96 @@
+import java.io.*;
+import java.math.*;
+import java.security.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.regex.*;
+
+public class Solution {
+
+    // Complete the hourglassSum function below.
+    static int hourglassSum(int[][] arr) {
+
+        int sum = 0,max =Integer.MIN_VALUE;
+        for(int i=0;i<arr.length-2;i++){
+            for(int j=0;j<arr.length-2;j++){
+                sum = arr[i][j]+arr[i][j+1]+arr[i][j+2]+
+                        arr[i+2][j]+arr[i+2][j+1]+arr[i+2][j+2]+
+                        arr[i+1][j+1];
+                if(max < sum)
+                    max = sum;
+            }
+        }
+        return max;
+
+    }
+
+    private static final Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) throws IOException {
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+
+        int[][] arr = new int[6][6];
+
+        for (int i = 0; i < 6; i++) {
+            String[] arrRowItems = scanner.nextLine().split(" ");
+            scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+            for (int j = 0; j < 6; j++) {
+                int arrItem = Integer.parseInt(arrRowItems[j]);
+                arr[i][j] = arrItem;
+            }
+        }
+
+        int result = hourglassSum(arr);
+
+        bufferedWriter.write(String.valueOf(result));
+        bufferedWriter.newLine();
+
+        bufferedWriter.close();
+
+        scanner.close();
+    }
+}
+import java.io.*;
+import java.math.*;
+import java.text.*;
+import java.util.*;
+import java.util.regex.*;
+
+public class Solution {
+
+    /*
+     * Complete the timeConversion function below.
+     */
+    static String timeConversion(String s) {
+        /*
+         * Write your code here.
+         */
+         //String result="Error";
+         int hours = Integer.parseInt(s.substring(0,2));
+         if(s.substring(s.length()-2).trim().equals("PM") && hours != 12){
+             s = s.replace(s.substring(0,2),Integer.toString(hours+12));
+         }
+         else if(s.substring(s.length()-2).trim().equals("AM") && hours == 12){
+             s = s.replace(s.substring(0,2),"00");
+         }
+         return s.substring(0,s.length()-2);
+
+    }
+
+    private static final Scanner scan = new Scanner(System.in);
+
+    public static void main(String[] args) throws IOException {
+        BufferedWriter bw = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+
+        String s = scan.nextLine();
+
+        String result = timeConversion(s);
+
+        bw.write(result);
+        bw.newLine();
+
+        bw.close();
+    }
+}
