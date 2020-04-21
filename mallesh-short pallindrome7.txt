@@ -1,0 +1,51 @@
+import java.io.*;
+import java.util.*; 
+    public class Solution {
+        public static void main(String[] args) {
+            Scanner in = new Scanner(System.in);
+                int m = 1000000007;
+                    String r = in.nextLine();
+
+        int one[] = new int[60];
+
+        int two[][] = new int[60][60];
+
+        int three[] = new int[60];
+
+        int count = 0;
+
+        for(int i=0;i<r.length();i++){
+
+            int current = r.charAt(i) - 'a';
+
+            count += three[current]%m;
+
+            count = count%m;
+
+            for(int j=0;j<26;j++){
+
+                three[j] += two[j][current]%m;
+
+                three[j] = three[j]%m;
+
+            }
+
+            for(int j=0;j<26;j++){
+
+                two[j][current] += one[j]%m;
+
+                two[j][current] = two[j][current]%m;
+
+            }
+
+            one[current] ++;
+
+            one[current] = one[current]%m;
+
+        }
+
+        System.out.println(count);
+
+    }
+
+}
