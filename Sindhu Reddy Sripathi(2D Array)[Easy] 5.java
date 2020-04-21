@@ -30,6 +30,7 @@ public class Solution {
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
 
         int[][] arr = new int[6][6];
+        
 
         for (int i = 0; i < 6; i++) {
             String[] arrRowItems = scanner.nextLine().split(" ");
