@@ -1,0 +1,79 @@
+#import <Foundation/Foundation.h>
+
+@interface NSString (NumberFromString)
+- (NSNumber *) numberFromString;
+@end
+
+@implementation NSString (NumberFromString)
+- (NSNumber *) numberFromString {
+    NSNumber *number = [[[NSNumberFormatter alloc] init] numberFromString:self];
+
+    if (number == nil) {
+        [NSException raise:@"Bad Input" format:@"%@", self];
+    }
+
+    return number;
+}
+@end
+
+@interface NSString (ArrayFromString)
+- (NSArray *) arrayFromString;
+@end
+
+@implementation NSString (ArrayFromString)
+- (NSArray *) arrayFromString {
+    return [self componentsSeparatedByString:@" "];
+}
+@end
+
+@interface Solution:NSObject
+- (NSArray *) contacts:(NSArray *)queries;
+@end
+
+@implementation Solution
+/*
+ * Complete the contacts function below.
+ */
+- (NSArray *) contacts:(NSArray *)queries {
+    /*
+     * Write your code here.
+     */
+
+}
+
+@end
+
+int main(int argc, const char* argv[]) {
+    @autoreleasepool {
+        NSString *stdout = [[[NSProcessInfo processInfo] environment] objectForKey:@"OUTPUT_PATH"];
+        [[NSFileManager defaultManager] createFileAtPath:stdout contents:nil attributes:nil];
+        NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingAtPath:stdout];
+
+        NSData *availableInputData = [[NSFileHandle fileHandleWithStandardInput] availableData];
+        NSString *availableInputString = [[NSString alloc] initWithData:availableInputData encoding:NSUTF8StringEncoding];
+        NSArray *availableInputArray = [availableInputString componentsSeparatedByString:@"\n"];
+
+        NSUInteger currentInputLine = 0;
+
+        NSUInteger queriesRows = [[[availableInputArray objectAtIndex:currentInputLine] numberFromString] integerValue];
+        currentInputLine += 1;
+
+        NSArray *queries = [[availableInputArray subarrayWithRange:NSMakeRange(currentInputLine, queriesRows)] valueForKey:@"arrayFromString"];
+        currentInputLine += queriesRows;
+
+        for (id queriesRow in queries) {
+            if ([queriesRow count] != 2) {
+                [NSException raise:@"Bad Input" format:@"%@", [queriesRow componentsJoinedByString:@", "]];
+            }
+        }
+
+        NSArray *result = [[[Solution alloc] init] contacts:queries];
+
+        [fileHandle writeData:[[result componentsJoinedByString:@"\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+        [fileHandle writeData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
+
+        [fileHandle closeFile];
+    }
+
+    return 0;
+}

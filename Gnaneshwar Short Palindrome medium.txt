@@ -1,0 +1,42 @@
+#import <Foundation/Foundation.h>
+#import <objc/Object.h>
+#import <objc/objc.h>
+
+@interface Solution:NSObject
+- (NSNumber *) shortPalindrome:(NSString *)s;
+@end
+
+@implementation Solution
+// Complete the shortPalindrome function below.
+- (NSNumber *) shortPalindrome:(NSString *)s {
+
+
+}
+
+@end
+
+int main(int argc, const char* argv[]) {
+    @autoreleasepool {
+        NSString *stdout = [[[NSProcessInfo processInfo] environment] objectForKey:@"OUTPUT_PATH"];
+        [[NSFileManager defaultManager] createFileAtPath:stdout contents:nil attributes:nil];
+        NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingAtPath:stdout];
+
+        NSData *availableInputData = [[NSFileHandle fileHandleWithStandardInput] availableData];
+        NSString *availableInputString = [[NSString alloc] initWithData:availableInputData encoding:NSUTF8StringEncoding];
+        NSArray *availableInputArray = [availableInputString componentsSeparatedByString:@"\n"];
+
+        NSUInteger currentInputLine = 0;
+
+        NSString *s = [availableInputArray objectAtIndex:currentInputLine];
+        currentInputLine += 1;
+
+        NSNumber *result = [[[Solution alloc] init] shortPalindrome:s];
+
+        [fileHandle writeData:[[result stringValue] dataUsingEncoding:NSUTF8StringEncoding]];
+        [fileHandle writeData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
+
+        [fileHandle closeFile];
+    }
+
+    return 0;
+}

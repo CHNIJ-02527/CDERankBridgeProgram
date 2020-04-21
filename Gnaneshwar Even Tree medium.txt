@@ -1,0 +1,109 @@
+#import <Foundation/Foundation.h>
+#import <objc/Object.h>
+#import <objc/objc.h>
+
+@interface NSString (StringByTrimmingTrailingCharactersInSet)
+- (NSString *) stringByTrimmingTrailingCharactersInSet:(NSCharacterSet *)characterSet;
+@end
+
+@implementation NSString (StringByTrimmingTrailingCharactersInSet)
+- (NSString *) stringByTrimmingTrailingCharactersInSet:(NSCharacterSet *)characterSet {
+    NSRange end = [self rangeOfCharacterFromSet:[characterSet invertedSet] options:NSBackwardsSearch];
+
+    if (end.location == NSNotFound) {
+        return @"";
+    }
+
+    return [self substringToIndex:end.location + 1];
+}
+@end
+
+@interface NSString (NumberFromString)
+- (NSNumber *) numberFromString:(NSNumberFormatter *)formatter;
+@end
+
+@implementation NSString (NumberFromString)
+- (NSNumber *) numberFromString:(NSNumberFormatter *)formatter {
+    NSNumber *number = [formatter numberFromString:[self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+
+    if (number == nil) {
+        [NSException raise:@"Bad Input" format:@"%@", self];
+    }
+
+    return number;
+}
+@end
+
+@interface NSString (ArrayFromString)
+- (NSArray *) arrayFromString;
+@end
+
+@implementation NSString (ArrayFromString)
+- (NSArray *) arrayFromString {
+    return [[self stringByTrimmingTrailingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] componentsSeparatedByString:@" "];
+}
+@end
+
+@interface Solution:NSObject
+- (NSNumber *) evenForest:(NSNumber *)t_nodes t_edges:(NSNumber *)t_edges t_from:(NSArray *)t_from t_to:(NSArray *)t_to;
+@end
+
+@implementation Solution
+// Complete the evenForest function below.
+- (NSNumber *) evenForest:(NSNumber *)t_nodes t_edges:(NSNumber *)t_edges t_from:(NSArray *)t_from t_to:(NSArray *)t_to {
+
+
+}
+
+@end
+
+int main(int argc, const char* argv[]) {
+    @autoreleasepool {
+        NSString *stdout = [[[NSProcessInfo processInfo] environment] objectForKey:@"OUTPUT_PATH"];
+        [[NSFileManager defaultManager] createFileAtPath:stdout contents:nil attributes:nil];
+        NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingAtPath:stdout];
+
+        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+
+        NSData *availableInputData = [[NSFileHandle fileHandleWithStandardInput] availableData];
+        NSString *availableInputString = [[NSString alloc] initWithData:availableInputData encoding:NSUTF8StringEncoding];
+        NSArray *availableInputArray = [availableInputString componentsSeparatedByString:@"\n"];
+
+        NSUInteger currentInputLine = 0;
+
+        NSArray *tNodesEdges = [[availableInputArray objectAtIndex:currentInputLine] componentsSeparatedByString:@" "];
+        currentInputLine += 1;
+
+        NSNumber *tNodes = [[tNodesEdges objectAtIndex:0] numberFromString:numberFormatter];
+        NSUInteger tEdges = [[tNodesEdges objectAtIndex:1] integerValue];
+
+        NSArray *tFromTo = [[availableInputArray subarrayWithRange:NSMakeRange(currentInputLine, tEdges)] valueForKey:@"arrayFromString"];
+        currentInputLine += tEdges;
+
+        for (NSString *tEdge in tFromTo) {
+            if ([tEdge count] != 2) {
+                [NSException raise:@"Bad Input" format:@"%@", [tEdge componentsJoinedByString:@", "]];
+            }
+        }
+
+        NSMutableArray *tFromTemp = [NSMutableArray arrayWithCapacity:tEdges];
+        NSMutableArray *tToTemp = [NSMutableArray arrayWithCapacity:tEdges];
+
+        for (NSString *tEdge in tFromTo) {
+            [tFromTemp addObject:[[tEdge objectAtIndex:0] numberFromString:numberFormatter]];
+            [tToTemp addObject:[[tEdge objectAtIndex:1] numberFromString:numberFormatter]];
+        }
+
+        NSArray *tFrom = [tFromTemp copy];
+        NSArray *tTo = [tToTemp copy];
+
+        NSNumber *res = [[[Solution alloc] init] evenForest:t_nodes t_edges:t_edges t_from:t_from t_to:t_to];
+
+        [fileHandle writeData:[[res stringValue] dataUsingEncoding:NSUTF8StringEncoding]];
+        [fileHandle writeData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
+
+        [fileHandle closeFile];
+    }
+
+    return 0;
+}

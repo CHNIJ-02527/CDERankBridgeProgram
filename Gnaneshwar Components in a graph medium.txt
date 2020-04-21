@@ -1,0 +1,81 @@
+#import <Foundation/Foundation.h>
+
+@interface NSString (NumberFromString)
+- (NSNumber *) numberFromString;
+@end
+
+@implementation NSString (NumberFromString)
+- (NSNumber *) numberFromString {
+    NSNumber *number = [[[NSNumberFormatter alloc] init] numberFromString:self];
+
+    if (number == nil) {
+        [NSException raise:@"Bad Input" format:@"%@", self];
+    }
+
+    return number;
+}
+@end
+
+@interface NSString (ArrayFromString)
+- (NSArray *) arrayFromString;
+@end
+
+@implementation NSString (ArrayFromString)
+- (NSArray *) arrayFromString {
+    return [self componentsSeparatedByString:@" "];
+}
+@end
+
+@interface Solution:NSObject
+- (NSArray *) componentsInGraph:(NSArray *)gb;
+@end
+
+@implementation Solution
+/*
+ * Complete the componentsInGraph function below.
+ */
+- (NSArray *) componentsInGraph:(NSArray *)gb {
+    /*
+     * Write your code here.
+     */
+
+}
+
+@end
+
+int main(int argc, const char* argv[]) {
+    @autoreleasepool {
+        NSString *stdout = [[[NSProcessInfo processInfo] environment] objectForKey:@"OUTPUT_PATH"];
+        [[NSFileManager defaultManager] createFileAtPath:stdout contents:nil attributes:nil];
+        NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingAtPath:stdout];
+
+        NSData *availableInputData = [[NSFileHandle fileHandleWithStandardInput] availableData];
+        NSString *availableInputString = [[NSString alloc] initWithData:availableInputData encoding:NSUTF8StringEncoding];
+        NSArray *availableInputArray = [availableInputString componentsSeparatedByString:@"\n"];
+
+        NSUInteger currentInputLine = 0;
+
+        NSNumber *n = [[availableInputArray objectAtIndex:currentInputLine] numberFromString];
+        currentInputLine += 1;
+
+        NSArray *gbTemp = [[availableInputArray subarrayWithRange:NSMakeRange(currentInputLine, [n unsignedIntegerValue])] valueForKey:@"arrayFromString"];
+        currentInputLine += [n unsignedIntegerValue];
+
+        for (id gbRow in gbTemp) {
+            if ([gbRow count] != 2) {
+                [NSException raise:@"Bad Input" format:@"%@", [gbRow componentsJoinedByString:@", "]];
+            }
+        }
+
+        NSArray *gb = [gbTemp valueForKey:@"numberFromString"];
+
+        NSArray *result = [[[Solution alloc] init] componentsInGraph:gb];
+
+        [fileHandle writeData:[[SPACE componentsJoinedByString:@" "] dataUsingEncoding:NSUTF8StringEncoding]];
+        [fileHandle writeData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
+
+        [fileHandle closeFile];
+    }
+
+    return 0;
+}
